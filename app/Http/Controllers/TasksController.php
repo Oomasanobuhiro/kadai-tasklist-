@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
-
+use Illuminate\Suppory\Facades\Auth;
 use Illuminate\Http\Request;
 use App\Models\Task;
 
@@ -10,6 +10,13 @@ class TasksController extends Controller
     /**
      * Display a listing of the resource.
      */
+    public function home(){
+        if(\Auth::check()){
+            return $this -> index();
+        }else{
+            return view('dashboard');
+        }
+    }
     public function index()
     {
         // タスク一覧を取得
@@ -48,6 +55,7 @@ class TasksController extends Controller
         $task = new Task;
         $task->content = $request->content;
         $task->status = $request->status;
+        $task->userid = auth()->id();
         $task->save();
 
         // トップページへリダイレクトさせる
@@ -62,10 +70,17 @@ class TasksController extends Controller
         // idの値でタスクを検索して取得
         $task = Task::findOrFail($id);
 
-        // タスク詳細ビューでそれを表示
-        return view('tasks.show', [
-            'task' => $task,
-        ]);
+        if($task->userid != auth()->id()){
+            return redirect('/');
+            print "権限がありません";
+
+        }
+            return view('tasks.show', [
+                'task' => $task,
+            ]);
+
+
+
     }
 
     /**
@@ -75,7 +90,11 @@ class TasksController extends Controller
     {
         // idの値でタスクを検索して取得
         $task = Task::findOrFail($id);
+        if($task->userid != auth()->id()){
+            return redirect('/');
+            print "権限がありません";
 
+        }
         // タスク編集ビューでそれを表示
         return view('tasks.edit', [
             'task' => $task,
@@ -108,6 +127,11 @@ class TasksController extends Controller
     {
         // idの値でタスクを検索して取得
         $task = Task::findOrFail($id);
+        if($task->userid != auth()->id()){
+            return redirect('/');
+            print "権限がありません";
+
+        }
         // タスクを削除
         $task->delete();
 

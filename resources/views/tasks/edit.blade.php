@@ -7,9 +7,9 @@
     </div>
 
     <div class="flex justify-center">
-        <form method="POST" action="{{ route('tasks.update', $task->id) }}" class="w-1/2">
+        <form  action="{{ route('tasks.update', $task->id) }}" method="post" class="w-1/2">
             @csrf
-            @method('PUT')
+            @method('patch')
 
                 <div class="form-control my-4">
                     <label for="content" class="label">

@@ -21,6 +21,12 @@
             <th>ステータス</th>
             <td>{{ $task-> status}}</td>
         </tr>
+
+        <tr>
+            <th>ユーザー</th>
+            <td>{{ $task-> userid}}</td>
+            <td>{{ auth()->id()}}</td>
+        </tr>
     </table>
   <a class="btn btn-outline" href="{{ route('tasks.edit', $task->id) }}">このタスクを編集</a>
 
